@@ -1,0 +1,24 @@
+{
+  "name": "agora_test_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production node app.js",
+    "stop": "node app",
+    "dev": "cross-env NODE_ENV=development node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "agora-access-token": "^2.0.4",
+    "express": "^4.17.1",
+    "pm2": "^5.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.9"
+  }
+}
