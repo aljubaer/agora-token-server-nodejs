@@ -1,12 +1,17 @@
 const express = require("express");
 const app = express();
 
-const { RtmTokenBuilder, RtmRole } = require("agora-access-token");
+const {
+    RtmTokenBuilder,
+    RtmRole,
+    RtcTokenBuilder,
+    RtcRole,
+} = require("agora-access-token");
 if (process.env.NODE_ENV === "development") {
     require("dotenv").config();
 }
 
-const generateToken = (account) => {
+const generateToken = (account, channelName = "testChannel") => {
     const appID = process.env.appID;
     const appCertificate = process.env.appCertificate;
 
@@ -15,13 +20,24 @@ const generateToken = (account) => {
 
     const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
 
-    return RtmTokenBuilder.buildToken(
+    const rtmToken = RtmTokenBuilder.buildToken(
         appID,
         appCertificate,
         account,
         RtmRole,
         privilegeExpiredTs
     );
+
+    const rtcToken = RtcTokenBuilder.buildTokenWithAccount(
+        appID,
+        appCertificate,
+        channelName,
+        account,
+        RtcRole,
+        privilegeExpiredTs
+    );
+
+    return { rtmToken, rtcToken };
 };
 
 app.get("/", (req, res) => {
@@ -30,8 +46,9 @@ app.get("/", (req, res) => {
 
 app.get("/token", (req, res) => {
     const account = req.query.username;
-    const token = generateToken(account);
-    res.status(200).json({ token });
+    const channelName = req.query.channelName;
+    const { rtmToken, rtcToken } = generateToken(account, channelName);
+    res.status(200).json({ rtmToken, rtcToken });
 });
 
 const PORT = process.env.PORT || 5000;
