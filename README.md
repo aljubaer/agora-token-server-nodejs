@@ -112,7 +112,7 @@ app.get("/rtm-token", (req, res) => {
 app.get("/rtc-token", (req, res) => {
     const account = req.query.username;
     const channelName = req.query.channelName;
-    const { rtmToken, rtcToken } = generateRtcToken(account, channelName);
+    const rtcToken = generateRtcToken(account, channelName);
     res.status(200).json({ token: rtcToken });
 });
 ```
